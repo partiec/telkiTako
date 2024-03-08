@@ -1,4 +1,5 @@
 package com.example.tacos.web;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,6 +24,7 @@ import com.example.tacos.Taco;
 @SessionAttributes("tacoOrder")
 public class DesignTacoController {
     @ModelAttribute
+    // вызывается раньше, добавляет в Model атрибуты: "wrap", "protein", "veggies", "cheese", "sauce". В каждом - список ингридиентов данного типа
     public void addIngredientsToModel(Model model) {
         List<Ingredient> ingredients = Arrays.asList(
                 new Ingredient("FLTO", "Flour Tortilla", Type.WRAP),
@@ -38,38 +40,42 @@ public class DesignTacoController {
         );
         Type[] types = Ingredient.Type.values();
         for (Type type : types) {
-            model.addAttribute(type.toString().toLowerCase(),
-                    filterByType(ingredients, type));
+            model.addAttribute(type.toString().toLowerCase(), filterByType(ingredients, type));
         }
     }
+
     @ModelAttribute(name = "tacoOrder")
+    // вызывается раньше, добавляет в Model атрибут: "tacoOrder" в котором объект new TacoOrder()
     public TacoOrder order() {
         return new TacoOrder();
     }
-    @ModelAttribute(name = "taco")
+
+    @ModelAttribute(name = "taco")  // вызывается раньше, добавляет в Model атрибут: "taco" в котором объект new Taco()
     public Taco taco() {
         return new Taco();
     }
+
     @GetMapping
     public String showDesignForm() {
         return "design";
     }
-    private Iterable<Ingredient> filterByType(
-            List<Ingredient> ingredients, Type type) {
+
+    @PostMapping
+    // Получение аргумента из модели, а модель уже связана с представлением. Поле заполняется параметром запроса с таким же именем - "tacoOrder"
+    public String processTaco(Taco taco, @ModelAttribute TacoOrder tacoOrder) {
+        tacoOrder.addTaco(taco);
+        log.info("Processing taco: {}", taco);
+        return "redirect:/orders/current";
+    }
+
+    // возвращает List ингридиентов данного типа
+    private Iterable<Ingredient> filterByType(List<Ingredient> ingredients, Type type) {
         return ingredients
                 .stream()
                 .filter(x -> x.getType().equals(type))
                 .collect(Collectors.toList());
     }
 }
-
-
-
-
-
-
-
-
 
 
 //original----------->
@@ -113,8 +119,8 @@ public class DesignTacoController {
 //        Type[] types = Ingredient.Type.values();
 //
 //        for (Type type : types) {   // types = {WRAP, PROTEIN, VEGGIES, CHEESE, SAUCE}
-//            //model.addAttribute(type.toString().toLowerCase());    //  WRONG !!! ';'
-//            //filterByType(ingredients, type);                      //  WRONG !!! ');'
+//            //model.addAttribute(type.toString().toLowerCase());                       //  WRONG !!! ';'
+//            //filterByType(ingredients, type);                                         //  WRONG !!! ');'
 //            model.addAttribute(type.toString().toLowerCase(),       // RIGHT
 //            filterByType(ingredients, type));                       // RIGHT
 //        }
