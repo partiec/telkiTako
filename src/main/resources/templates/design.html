@@ -14,20 +14,17 @@
 <img th:src="@{/images/tako2.png}"/>
 
 
-<!--  почему method="POST" ???   -->
-<!--                      @ModelAttribute(name = "taco")
+<!--                      @ModelAttribute(name = "taco")  // вызывается раньше, добавляет в Model атрибут: "taco" в котором объект new Taco()
                           public Taco taco() {
-                             return new Taco();
+                                 return new Taco();
                           }-->
 <form method="POST" th:object="${taco}">
-
-
     <div class="grid">
 
         <!-- 1. -->
         <div class="ingredient-group" id="wraps">
             <h3>Designate your wrap:</h3>
-            <div th:each="ingredient : ${wrap}">
+            <div th:each="ingredient : ${wrap}"><!-- перебираем wrap, в нем 2 wrap-ингредиента -->
                 <input type="checkbox" th:field="*{ingredients}" th:value="${ingredient.id}"/>
                 <span th:text="${ingredient.name}">INGREDIENT</span><br/>
             </div>
@@ -37,7 +34,7 @@
         <div class="ingredient-group" id="proteins">
             <h3>Pick your protein:</h3>
             <div th:each="ingredient : ${protein}">
-                <input type="checkbox" th:field="*{ingredients}"  th:value="${ingredient.id}"/>
+                <input type="checkbox" th:field="*{ingredients}" th:value="${ingredient.id}"/>
                 <span th:text="${ingredient.name}">INGREDIENT</span><br/>
             </div>
         </div>
@@ -46,7 +43,7 @@
         <div class="ingredient-group" id="cheeses">
             <h3>Choose your cheese:</h3>
             <div th:each="ingredient : ${cheese}">
-                <input type="checkbox" th:field="*{ingredients}"  th:value="${ingredient.id}"/>
+                <input type="checkbox" th:field="*{ingredients}" th:value="${ingredient.id}"/>
                 <span th:text="${ingredient.name}">INGREDIENT</span><br/>
             </div>
         </div>
@@ -55,7 +52,7 @@
         <div class="ingredient-group" id="veggies">
             <h3>Determine your veggies:</h3>
             <div th:each="ingredient : ${veggies}">
-                <input type="checkbox" th:field="*{ingredients}"  th:value="${ingredient.id}"/>
+                <input type="checkbox" th:field="*{ingredients}" th:value="${ingredient.id}"/>
                 <span th:text="${ingredient.name}">INGREDIENT</span><br/>
             </div>
         </div>
@@ -64,7 +61,7 @@
         <div class="ingredient-group" id="sauces">
             <h3>Select your sauce:</h3>
             <div th:each="ingredient : ${sauce}">
-                <input type="checkbox" th:field="*{ingredients}"  th:value="${ingredient.id}"/>
+                <input type="checkbox" th:field="*{ingredients}" th:value="${ingredient.id}"/>
                 <span th:text="${ingredient.name}">INGREDIENT</span><br/>
             </div>
         </div>
@@ -77,6 +74,10 @@
         <br/>
         <button>Submit Your Taco</button>
     </div>
+
 </form>
+
+
+
 </body>
 </html>

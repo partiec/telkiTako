@@ -1,30 +1,29 @@
-package com.example.tacos.web;
+package com.example.tacos;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.example.tacos.Ingredient;
-import com.example.tacos.TacoOrder;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import lombok.extern.slf4j.Slf4j;
-import com.example.tacos.Ingredient;
 import com.example.tacos.Ingredient.Type;
-import com.example.tacos.Taco;
 
 @Slf4j
 @Controller
 @RequestMapping("/design")
 @SessionAttributes("tacoOrder")
 public class DesignTacoController {
-    @ModelAttribute
-    // вызывается раньше, добавляет в Model атрибуты: "wrap", "protein", "veggies", "cheese", "sauce". В каждом - список ингридиентов данного типа
+
+
+    // вызывается раньше, добавляет в Model атрибуты: "wrap", "protein", "veggies", "cheese", "sauce". В каждом - список из двух! ингридиентов данного типа
     public void addIngredientsToModel(Model model) {
         List<Ingredient> ingredients = Arrays.asList(
                 new Ingredient("FLTO", "Flour Tortilla", Type.WRAP),
@@ -45,15 +44,15 @@ public class DesignTacoController {
     }
 
     @ModelAttribute(name = "tacoOrder")
-    // вызывается раньше, добавляет в Model атрибут: "tacoOrder" в котором объект new TacoOrder()
     public TacoOrder order() {
         return new TacoOrder();
     }
 
-    @ModelAttribute(name = "taco")  // вызывается раньше, добавляет в Model атрибут: "taco" в котором объект new Taco()
+    @ModelAttribute(name = "taco")
     public Taco taco() {
         return new Taco();
     }
+
 
     @GetMapping
     public String showDesignForm() {
@@ -61,8 +60,13 @@ public class DesignTacoController {
     }
 
     @PostMapping
-    // Получение аргумента из модели, а модель уже связана с представлением. Поле заполняется параметром запроса с таким же именем - "tacoOrder"
-    public String processTaco(Taco taco, @ModelAttribute TacoOrder tacoOrder) {
+    // Получение аргумента из модели, а модель уже связана с представлением. Поле заполняется тем самым объектом из представления
+    public String processTaco(
+            @Valid Taco taco, Errors errors,
+            @ModelAttribute TacoOrder tacoOrder) {
+        if (errors.hasErrors()) {
+            return "design";
+        }
         tacoOrder.addTaco(taco);
         log.info("Processing taco: {}", taco);
         return "redirect:/orders/current";
