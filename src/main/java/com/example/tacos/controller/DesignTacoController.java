@@ -1,9 +1,12 @@
-package com.example.tacos;
+package com.example.tacos.controller;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.example.tacos.Ingredient;
+import com.example.tacos.Taco;
+import com.example.tacos.TacoOrder;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

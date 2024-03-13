@@ -1,5 +1,6 @@
-package com.example.tacos;
+package com.example.tacos.controller;
 
+import com.example.tacos.MyCat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

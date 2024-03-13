@@ -1,4 +1,4 @@
-package com.example.tacos;
+package com.example.tacos.controller;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
