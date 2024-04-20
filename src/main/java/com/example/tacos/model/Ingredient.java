@@ -1,5 +1,7 @@
-package com.example.tacos;
+package com.example.tacos.model;
+
 import lombok.Data;
+
 @Data
 public class Ingredient {
     private final String id;
@@ -9,4 +11,3 @@ public class Ingredient {
         WRAP, PROTEIN, VEGGIES, CHEESE, SAUCE
     }
 }
-
