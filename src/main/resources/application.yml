@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/tacocloud
+    username: postgres
+    password: Postgre_AkauntPala_10
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+
+
+
